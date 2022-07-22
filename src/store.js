@@ -17,33 +17,33 @@ let stock = createSlice({
 });
 
 // 숙제
-let item = createSlice({
-    name: "item",
+let itemState = createSlice({
+    name: "item__",
     initialState: [
         { id: 0, name: "White and Black", count: 2 },
         { id: 2, name: "Grey Yordan", count: 1 },
     ],
     reducers: {
-        plusCount(state, data) {
+        plusCount(state, action) {
             console.log(JSON.stringify(state));
-            console.log(JSON.stringify(data.payload));
+            console.log(JSON.stringify(action.type));
+            console.log(JSON.stringify(action.payload));
 
-            let newState = [];
-            state.map((value, index) => {
-                if (value.id === data.payload) {
-                    let newItem = {
-                        id: value.id,
-                        name: value.name,
-                        count: value.count + 1,
-                    };
-                    newState = [...newState, newItem];
-                } else {
-                    newState = [...newState, value];
-                }
-            });
-
-            return newState;
+            //state[action.payload].count++
+            let index = state.findIndex((a) => { return a.id === action.payload })
+            state[index].count++
         },
+        minusCount(state, action) {
+            console.log(JSON.stringify(state))
+            console.log(JSON.stringify(action.payload))
+
+            let index = state.findIndex((a) => { return a.id === action.payload })
+            state[index].count--
+        },
+        addItem(state, action) {
+            //return [...state, { id:10, name: "Star Wars", count: 20 }]
+            state.push(action.payload)
+        }
     },
 });
 
@@ -59,6 +59,24 @@ let user = createSlice({
     },
 });
 
+// 숙제
+let userHW = createSlice({
+    name: "userHW",
+    initialState: {name: "Kim", age: 20},
+    reducers: {
+        changeNameHW(state, action) {
+            state.name = "Kwon"
+            return state
+        },
+        changeAgeHW(state, action) {
+            console.log("called")
+            state.age = 30
+            return state
+        }
+    }
+})
+
+
 //const data = [
 //    { id: 0, name: "White and Black", count: 2 },
 //    { id: 2, name: "Grey Yordan", count: 1 },
@@ -68,10 +86,12 @@ export default configureStore({
     reducer: {
         user: user.reducer,
         stock: stock.reducer,
-        item: item.reducer,
+        item: itemState.reducer,
+        userHW: userHW.reducer,
     },
 });
 
 // 4-2 actions 으로 export 시켜주기
 export let { changeName } = user.actions;
-export let { plusCount } = item.actions;
+export let { plusCount, minusCount, addItem } = itemState.actions;
+export let { changeNameHW, changeAgeHW } = userHW.actions;

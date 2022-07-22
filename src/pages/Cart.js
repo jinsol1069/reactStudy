@@ -2,7 +2,7 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 // 4-3. import 및 dispatch 로 감싸 사용하기
-import { changeName, plusCount } from "../store";
+import { changeName, plusCount, minusCount, addItem, changeAgeHW } from "../store";
 
 const Cart = () => {
     // 3. data 가져다 쓰는 법
@@ -31,6 +31,24 @@ const Cart = () => {
         console.log(id);
         dispatch(plusCount(id));
     };
+    const reduceCount = (id) => {
+        console.log(id);
+        dispatch(minusCount(id));
+    };
+    const addMore = () => {
+        console.log("add")
+        dispatch(addItem( {id : 5, name : 'Star Wars', count : 10} ))
+    };
+
+    // 숙제 1
+    let userHW = useSelector((state) => {
+        console.log("age changed " + JSON.stringify(state.userHW))
+        return state.userHW
+    })
+    const changeAge = () => {
+        console.log("change age")
+        dispatch(changeAgeHW())
+    }
 
     return (
         <>
@@ -61,13 +79,17 @@ const Cart = () => {
                                     <button onClick={() => addCount(value.id)}>
                                         +
                                     </button>
+                                    <button onClick={() => reduceCount(value.id)}>
+                                        -
+                                    </button>
                                 </td>
                             </tr>
                         );
                     })}
                 </tbody>
             </Table>
-            <button onClick={updateName}>상태바꾸기</button>
+            <button onClick={addMore}>추가하기</button>
+            <button onClick={changeAge}>숙제1</button>
         </>
     );
 };
